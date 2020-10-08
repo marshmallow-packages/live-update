@@ -5,7 +5,10 @@
 [![Issues](https://img.shields.io/github/issues/marshmallow-packages/live-update)](https://github.com/marshmallow-packages/live-update)
 [![Code Coverage](https://img.shields.io/badge/coverage-100%25-success)](https://github.com/marshmallow-packages/live-update)
 [![Licence](https://img.shields.io/github/license/marshmallow-packages/live-update)](https://github.com/marshmallow-packages/live-update)
+
 With this package is is possible to edit nova field on the index view.
+
+<img src="https://raw.githubusercontent.com/marshmallow-packages/live-update/main/resources/screenshots/inline-editable.png"/>
 
 ## Installation
 
