@@ -1,11 +1,13 @@
 <template>
     <div class="relative flex items-stretch">
         <input
-            :id="field.name"
+            :id="getHtmlId()"
             type="text"
             class="w-full form-control form-input form-input-bordered live-update"
             :placeholder="field.name"
             v-model="value"
+            :tabindex="tabindex"
+            v-on:keyup="keyup"
             @blur="save"
         />
         <!-- thanks to https://github.com/epartment/nova-unique-ajax-field/blob/master/resources/js/components/FormField.vue -->
@@ -22,11 +24,49 @@ export default {
     data() {
         return {
             loading: false,
+            tabindex: 1,
         }
     },
     mixins: [FormField],
     props: ['resourceName', 'resourceId', 'field'],
+
     methods: {
+    	getHtmlId() {
+    		return this.field.attribute + '-' + this.field.id
+    	},
+    	keyup (e) {
+    		var prev_keys = [
+    			38 // Arrow up
+    		];
+    		var next_keys = [
+    			13,  // Enter
+    			40	 // Arrow down
+    		];
+    		if (next_keys.includes(e.keyCode)) {
+    			this.activateNextInputField(e)
+	      	} else if (prev_keys.includes(e.keyCode)) {
+    			this.activatePrevInputField(e)
+	      	}
+    	},
+    	activateNextInputField(e) {
+			this.activateRow(
+				this.currentRow(e).nextElementSibling
+			)
+    	},
+    	activatePrevInputField(e) {
+			this.activateRow(
+				this.currentRow(e).previousElementSibling
+			)
+    	},
+    	currentRow(e) {
+    		return e.target.closest('tr')
+    	},
+    	activateRow(element) {
+    		if (element) {
+    			element.querySelector('.live-update').focus()
+    			element.querySelector('.live-update').select()
+    		}
+    	},
         save() {
             var vm = this;
             if (this.value != this.field.value) {
@@ -46,7 +86,6 @@ export default {
                     })
                     .catch (function (error) {
                         vm.loading = false
-                        console.log(error);
 
                         if (error.response.status == 422) {
                             let validationErrors = [];
