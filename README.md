@@ -12,6 +12,7 @@ With this package is is possible to edit nova field on the index view.
 
 ## Installation
 
+
 You can install the package via composer:
 ``` bash
 composer require marshmallow/live-update
