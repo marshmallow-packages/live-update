@@ -67,6 +67,30 @@
                         </template>
                     </Tooltip>
                 </div>
+                <div v-if="field.copyableAction" class="ml-1 hover:bg-gray-100 rounded-full">
+                    <Tooltip :triggers="['hover']" >
+                        <Icon
+                            v-if="!copyabel_action_run"
+                            width="14"
+                            @click="runCopyableAction"
+                            :solid="false"
+                            :type="field.copyableActionIcon"
+                            class="cursor-pointer text-gray-400 dark:text-gray-500"
+                        />
+                        <Icon
+                            v-if="copyabel_action_run"
+                            class="text-green-500"
+                            :solid="true"
+                            type="check-circle"
+                            width="14"
+                        />
+                        <template #content>
+                            <TooltipContent :max-width="width">
+                                {{ field.copyableActionTooltip ?? 'Run' + field.copyableAction }}
+                            </TooltipContent>
+                        </template>
+                    </Tooltip>
+                </div>
 
                 <Loader
                     class="absolute right-0 mr-2"
@@ -87,6 +111,7 @@
             loading: false,
             copied: false,
             copied_to: false,
+            copyabel_action_run: false,
         }),
         mixins: [FormField, CopiesToClipboard],
         props: ["resourceName", "resourceId", "field"],
@@ -110,6 +135,41 @@
                 setTimeout(() => {
                     this.copied_to = false;
                 }, 1000);
+            },
+            runCopyableAction() {
+
+                this.copyabel_action_run = true;
+                let element_id = this.field.copyableActionFieldName + this.field.id;
+                let element = document.getElementById(element_id);
+
+                let self = this;
+                let formData = new FormData();
+                formData.append("action_class", this.field.copyableAction);
+                let resourceId = this.field.id;
+
+                return Nova.request()
+                    .post(
+                        `/live-update/run-action/${this.resourceName}/${resourceId}`,
+                        formData
+                    )
+                    .then(
+                        (response) => {
+                            element.blur();
+                            element.value = response.data.value;
+                            element.dispatchEvent(new Event("input", { bubbles: true }));
+
+                            setTimeout(() => {
+                                this.copyabel_action_run = false;
+                            }, 1000);
+                        },
+                        (response) => {
+                            Nova.error(response);
+                            this.copyabel_action_run = false;
+                        }
+                    )
+                    .finally(() => {
+                        this.copyabel_action_run = false;
+                    });
             },
             async updateTranslation() {
                 let vm = this;

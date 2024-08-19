@@ -14,3 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/update/{resource}', 'Marshmallow\LiveUpdate\Http\Controllers\LiveUpdateController@update');
+
+Route::post('/run-action/{resource}/{resourceId}', 'Marshmallow\LiveUpdate\Http\Controllers\LiveUpdateController@runCopyableAction');

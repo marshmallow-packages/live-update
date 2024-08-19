@@ -40,6 +40,20 @@ class TextLiveUpdate extends Field
         ]);
     }
 
+    public function copyableWithAction(string $action, string $icon, string $target_field_label, string $tooltip, ?callable $when = null): self
+    {
+        if ($when && !$when()) {
+            return $this;
+        }
+
+        return $this->withMeta([
+            'copyableAction' => $action,
+            'copyableActionIcon' => $icon,
+            'copyableActionFieldName' => $target_field_label,
+            'copyableActionTooltip' => $tooltip,
+        ]);
+    }
+
     public function asPlaceholder()
     {
         return $this->withMeta([
