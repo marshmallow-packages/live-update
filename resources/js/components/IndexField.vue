@@ -2,7 +2,10 @@
     <div @click.stop class="relative w-full flex items-stretch">
         <template v-if="hasValue">
             <div class="relative whitespace-nowrap flex items-center">
-                <input
+                <div v-if="field.asPlaceholder">
+                    {{ field.value }}
+                </div>
+                <input v-else
                     :id="field.name + field.id"
                     type="text"
                     class="w-full w-full form-control form-input form-input-bordered"
@@ -13,6 +16,58 @@
                     @keyup.enter="save"
                     :style="'min-width:250px;'"
                 />
+                <div v-if="field.copyable" class="ml-1 hover:bg-gray-100 rounded-full">
+                    <Tooltip :triggers="['hover']">
+                        <Icon
+                            v-if="!copied"
+                            width="14"
+                            @click="copy"
+                            :solid="false"
+                            type="clipboard"
+                            class="cursor-pointer text-gray-400 dark:text-gray-500"
+                        />
+
+                        <Icon
+                            v-if="copied"
+                            class="text-green-500"
+                            :solid="true"
+                            type="check-circle"
+                            width="14"
+                        />
+
+                        <template #content>
+                            <TooltipContent :max-width="width">
+                                Copy to clipboard
+                            </TooltipContent>
+                        </template>
+                    </Tooltip>
+                </div>
+
+                <div v-if="field.copyableTo" class="ml-1 hover:bg-gray-100 rounded-full">
+                    <Tooltip :triggers="['hover']" >
+                        <Icon
+                            v-if="!copied_to"
+                            width="14"
+                            @click="copyTo"
+                            :solid="false"
+                            type="duplicate"
+                            class="cursor-pointer text-gray-400 dark:text-gray-500"
+                        />
+                        <Icon
+                            v-if="copied_to"
+                            class="text-green-500"
+                            :solid="true"
+                            type="check-circle"
+                            width="14"
+                        />
+                        <template #content>
+                            <TooltipContent :max-width="width">
+                                {{ field.copyableToTooltip ?? 'Copy to' + field.copyableToFieldName }}
+                            </TooltipContent>
+                        </template>
+                    </Tooltip>
+                </div>
+
                 <Loader
                     class="absolute right-0 mr-2"
                     v-show="loading"
@@ -24,16 +79,38 @@
 </template>
 
 <script>
-    import { FormField } from "laravel-nova";
+    import { FormField, CopiesToClipboard } from "laravel-nova";
     import api from "../api";
 
     export default {
         data: () => ({
             loading: false,
+            copied: false,
+            copied_to: false,
         }),
-        mixins: [FormField],
+        mixins: [FormField, CopiesToClipboard],
         props: ["resourceName", "resourceId", "field"],
         methods: {
+            copy () {
+                this.copied = true;
+                this.copyValueToClipboard(this.field.value);
+                setTimeout(() => {
+                    this.copied = false;
+                }, 1000);
+            },
+            copyTo () {
+                this.copied_to = true;
+                let element_id = this.field.copyableToFieldName + this.field.id;
+                let element = document.getElementById(element_id);
+
+                element.blur();
+                element.value = this.field.value;
+                element.dispatchEvent(new Event("input", { bubbles: true }));
+
+                setTimeout(() => {
+                    this.copied_to = false;
+                }, 1000);
+            },
             async updateTranslation() {
                 let vm = this;
                 try {
