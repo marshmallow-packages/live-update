@@ -4,7 +4,7 @@ namespace Marshmallow\LiveUpdate;
 
 use Config;
 use Laravel\Nova\Fields\Field;
-u
+
 class TextLiveUpdate extends Field
 {
     /**
