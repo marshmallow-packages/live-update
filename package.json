@@ -10,20 +10,9 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "@inertiajs/inertia": "^0.11.0",
-        "@inertiajs/inertia-vue3": "^0.6.0",
-        "@vue/babel-plugin-jsx": "^1.1.1",
-        "@vue/compiler-sfc": "^3.2.33",
-        "cross-env": "^7.0.3",
-        "form-backend-validation": "^2.3.3",
-        "laravel-mix": "^6.0.43",
+        "laravel-nova-devtool": "file:vendor/laravel/nova-devtool",
         "resolve-url-loader": "^5.0.0",
-        "sass": "^1.43.4",
-        "sass-loader": "^12.3.0",
-        "vue-loader": "^16.8.3",
-        "vue-template-compiler": "^2.6.14"
-    },
-    "dependencies": {
-        "vuex": "^4.0.2"
+        "sass": "^1.85.1",
+        "sass-loader": "^12.6.0"
     }
 }

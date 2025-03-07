@@ -14,14 +14,31 @@ class TextLiveUpdate extends Field
      */
     public $component = 'live-update';
 
-    protected function resolveAttribute($resource, $attribute)
+    protected function resolveAttribute($resource, string $attribute): mixed
     {
         $this->withMeta([
             'id' => data_get($resource, $resource->getKeyName()),
-            'nova_path' => Config::get('nova.path')
+            'nova_path' => config::get('nova.path'),
         ]);
 
         return parent::resolveAttribute($resource, $attribute);
+    }
+
+    public function type(string $type): self
+    {
+        $field = $this->withMeta([
+            'type' => $type,
+        ]);
+
+        if ($type == 'date') {
+            return $field->withMeta([
+                'saveOnChange' => true,
+            ])->resolveUsing(function ($value) {
+                return $value?->format('Y-m-d');
+            });
+        }
+
+        return $field;
     }
 
     public function copyable()
@@ -31,7 +48,7 @@ class TextLiveUpdate extends Field
         ]);
     }
 
-    public function copyableTo(string $field_name, string $tooltip = null)
+    public function copyableTo(string $field_name, ?string $tooltip = null)
     {
         return $this->withMeta([
             'copyableTo' => true,

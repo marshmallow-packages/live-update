@@ -7,7 +7,7 @@
         <template #field>
             <input
                 v-bind="extraAttributes"
-                class="w-full form-control form-input form-input-bordered"
+                class="w-full form-control form-input form-control-bordered"
                 @input="handleChange"
                 :value="value"
                 :id="currentField.uniqueKey"
