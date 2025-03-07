@@ -1,9 +1,23 @@
-import IndexField from "./components/IndexField";
-import DetailField from "./components/DetailField";
-import FormField from "./components/FormField";
+Nova.booting((Vue) => {
+    Vue.component(
+        "live-update-field",
+        require("./components/LiveUpdateField").default
+    );
+    Vue.component(
+        "index-live-update",
+        require("./components/IndexField").default
+    );
+    Vue.component(
+        "preview-live-update",
+        require("./components/PreviewField").default
+    );
 
-Nova.booting((app, store) => {
-    app.component("index-live-update", IndexField);
-    app.component("detail-live-update", DetailField);
-    app.component("form-live-update", FormField);
+    Vue.component(
+        "detail-live-update",
+        require("./components/DetailField").default
+    );
+    Vue.component(
+        "form-live-update",
+        require("./components/FormField").default
+    );
 });
