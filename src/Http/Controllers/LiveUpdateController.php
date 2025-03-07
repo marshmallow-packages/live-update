@@ -2,6 +2,7 @@
 
 namespace Marshmallow\LiveUpdate\Http\Controllers;
 
+use Illuminate\Support\Arr;
 use Illuminate\Routing\Controller;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -11,7 +12,7 @@ class LiveUpdateController extends Controller
     {
         $resourceClass = $request->resource();
         $resourceValidationRules = $resourceClass::rulesForUpdate($request);
-        $fieldValidationRules = $resourceValidationRules[$request->attribute];
+        $fieldValidationRules = Arr::get($resourceValidationRules, $request->attribute);
 
         if (!empty($fieldValidationRules)) {
             $validatedData = $request->validate([
