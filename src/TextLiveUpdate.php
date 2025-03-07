@@ -14,6 +14,8 @@ class TextLiveUpdate extends Field
      */
     public $component = 'live-update';
 
+    public $listnerCallback = null;
+
     protected function resolveAttribute($resource, string $attribute): mixed
     {
         $this->withMeta([
@@ -45,6 +47,16 @@ class TextLiveUpdate extends Field
     {
         return $this->withMeta([
             'copyable' => true,
+        ]);
+    }
+
+    public function listen($attribute, $event, $callback)
+    {
+        $this->listnerCallback = $callback;
+
+        return $this->withMeta([
+            'listen' => $attribute,
+            'listen_event' => $event,
         ]);
     }
 

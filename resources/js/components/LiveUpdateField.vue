@@ -122,6 +122,28 @@
         }),
         mixins: [FormField, CopiesToClipboard],
         props: ["resourceName", "resourceId", "field"],
+        mounted() {
+            if (this.field.listen) {
+                let self = this;
+                Nova.$on(
+                    `${this.field.listen}-${this.field.listen_event}`,
+                    function (value) {
+                        let formData = new FormData();
+                        formData.append("value", value);
+                        formData.append("attribute", self.field.attribute);
+                        Nova.request()
+                            .post(
+                                `/live-update/listen/${self.resourceName}/${self.resourceId}`,
+                                formData
+                            )
+                            .then((response) => {
+                                self.value = response.data.value;
+                                self.save();
+                            });
+                    }
+                );
+            }
+        },
         methods: {
             copy() {
                 this.copied = true;
