@@ -13,6 +13,6 @@
         "laravel-nova-devtool": "file:vendor/laravel/nova-devtool",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.85.1",
-        "sass-loader": "^12.6.0"
+        "sass-loader": "^16.0.5"
     }
 }
