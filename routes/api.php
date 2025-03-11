@@ -25,7 +25,7 @@ Route::post('/listen/{resource}/{resourceId}', function ($resource, $resourceId,
         return $field->attribute == $request->attribute;
     })->first();
 
-    $callback = $field->listnerCallback;
+    $callback = $field ? $field->listnerCallback : null;
     if (!$callback) {
         return response()->json([
             'value' => null,
