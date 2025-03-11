@@ -212,7 +212,9 @@
                         vm.field.attribute,
                         vm.value
                     );
-                    Nova.success("Successfully updated!");
+                    Nova.success(
+                        `${vm.field.name} is successfully updated and saved!`
+                    );
                 } catch (error) {
                     if (error.response.status == 422) {
                         let validationErrors = [];
